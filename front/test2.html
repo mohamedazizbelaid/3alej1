@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediRendez-vous · Récupération</title>
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #e9f0f9 0%, #dbe5f0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .main-card {
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 2.5rem;
+      box-shadow: 0 25px 50px -10px rgba(0,50,80,0.25), 0 0 0 1px rgba(156, 188, 226, 0.3);
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      flex-wrap: wrap;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    /* panneau gauche (brand) */
+    .brand-panel {
+      flex: 1 1 280px;
+      background: linear-gradient(135deg, #1c3f5c, #143649);
+      color: white;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 400px;
+    }
+
+    .brand-header h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .brand-header h1 i {
+      color: #5fc1b0;
+      margin-right: 8px;
+    }
+
+    .brand-header .tagline {
+      font-size: 1rem;
+      opacity: 0.75;
+      font-weight: 400;
+      border-left: 3px solid #5fc1b0;
+      padding-left: 1rem;
+      margin-top: 1rem;
+    }
+
+    .brand-features {
+      margin: 2rem 0;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+      font-weight: 300;
+      opacity: 0.9;
+    }
+
+    .feature-item i {
+      font-size: 1.2rem;
+      width: 28px;
+      color: #7fd9c8;
+    }
+
+    .brand-footer {
+      font-size: 0.85rem;
+      opacity: 0.5;
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* panneau droit (formulaires) */
+    .form-panel {
+      flex: 1.2 1 400px;
+      background: white;
+      padding: 2.5rem 2.2rem;
+    }
+
+    .form-header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.8rem;
+    }
+
+    .form-header h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1c3f5c;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-header h2 i {
+      color: #1e7b6f;
+    }
+
+    .form-header p {
+      color: #4a6a7f;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* options de récupération */
+    .recovery-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .recovery-option {
+      background: #f8fafd;
+      border: 2px solid #dee7ef;
+      border-radius: 24px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+    }
+
+    .recovery-option:hover {
+      border-color: #1e7b6f;
+      background: #f0f7fa;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -10px rgba(30, 123, 111, 0.3);
+    }
+
+    .recovery-option.selected {
+      border-color: #1e7b6f;
+      background: #e3f2ed;
+      box-shadow: 0 0 0 4px rgba(30, 123, 111, 0.15);
+    }
+
+    .option-radio {
+      margin-top: 0.3rem;
+    }
+
+    .option-radio input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #1e7b6f;
+      cursor: pointer;
+    }
+
+    .option-content {
+      flex: 1;
+    }
+
+    .option-content h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1c3f5c;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .option-content h3 i {
+      color: #1e7b6f;
+    }
+
+    .option-content p {
+      color: #4f6f87;
+      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .option-detail {
+      margin-top: 0.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.4rem;
+    }
+
+    .input-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1f3a4b;
+      margin-bottom: 6px;
+    }
+
+    .input-group label i {
+      color: #1e7b6f;
+      width: 18px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1.5px solid #dee7ef;
+      border-radius: 18px;
+      font-size: 0.95rem;
+      transition: 0.15s;
+      background: #f9fcff;
+    }
+
+    .input-field:focus {
+      border-color: #1e7b6f;
+      outline: none;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 123, 111, 0.1);
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: #1e3b4f;
+      border: none;
+      padding: 1rem;
+      border-radius: 40px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 8px 18px -6px rgba(20, 60, 80, 0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-primary:hover {
+      background: #143649;
+      transform: scale(1.01);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-link {
+      background: none;
+      border: none;
+      color: #1e7b6f;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .info-message {
+      background: #f0f9ff;
+      padding: 1rem;
+      border-radius: 24px;
+      font-size: 0.9rem;
+      border: 1px solid #cde3f0;
+      color: #1f4b6e;
+      margin: 1.5rem 0 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-message i {
+      color: #1e7b6f;
+      font-size: 1.3rem;
+    }
+
+    .back-to-login {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .back-to-login button {
+      background: none;
+      border: none;
+      color: #1e7b6f;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    hr {
+      margin: 1.5rem 0 1rem;
+      border: 1px solid #edf2f7;
+    }
+
+    .confirmation-screen {
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .confirmation-screen i {
+      font-size: 4rem;
+      color: #1e7b6f;
+      margin-bottom: 1rem;
+    }
+
+    .confirmation-screen h3 {
+      font-size: 1.5rem;
+      color: #1c3f5c;
+      margin-bottom: 0.5rem;
+    }
+
+    .confirmation-screen p {
+      color: #4f6f87;
+      margin-bottom: 1.5rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 680px) {
+      .main-card {
+        flex-direction: column;
+        border-radius: 2rem;
+      }
+      .brand-panel {
+        min-height: auto;
+        padding: 1.8rem;
+      }
+      .recovery-option {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-card">
+    <!-- partie gauche (présentation) -->
+    <div class="brand-panel">
+      <div class="brand-header">
+        <h1><i class="fas fa-notes-medical"></i> MediRendez-vous</h1>
+        <div class="tagline">Gestion simplifiée des consultations</div>
+      </div>
+      <div class="brand-features">
+        <div class="feature-item"><i class="fas fa-calendar-check"></i> Prise de rendez-vous 24h/24</div>
+        <div class="feature-item"><i class="fas fa-user-md"></i> Planning médecins temps réel</div>
+        <div class="feature-item"><i class="fas fa-bell"></i> Rappels automatiques</div>
+        <div class="feature-item"><i class="fas fa-lock"></i> Sécurité des données santé</div>
+      </div>
+      <div class="brand-footer">
+        <span><i class="far fa-clock"></i> Démo interactive</span>
+        <span>v2.1.0</span>
+      </div>
+    </div>
+
+    <!-- partie droite (formulaires de récupération) -->
+    <div class="form-panel">
+      <div class="form-header">
+        <h2><i class="fas fa-key"></i> Récupération</h2>
+        <p>Choisissez votre méthode de récupération</p>
+      </div>
+
+      <!-- Écran de choix de méthode -->
+      <div id="choiceScreen">
+        <div class="recovery-options">
+          <!-- Option Email -->
+          <div class="recovery-option" id="optionEmail" data-method="email">
+            <div class="option-radio">
+              <input type="radio" name="recoveryMethod" id="radioEmail" value="email" checked>
+            </div>
+            <div class="option-content">
+              <h3><i class="fas fa-envelope"></i> Par email</h3>
+              <p>Recevez un lien de réinitialisation sur votre adresse email</p>
+              <div class="option-detail" id="emailDetail">
+                <div class="input-group" style="margin-bottom: 0;">
+                  <label><i class="fas fa-envelope"></i> Votre email</label>
+                  <input type="email" class="input-field" id="emailInput" placeholder="exemple@cabinet.fr">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Option SMS -->
+          <div class="recovery-option" id="optionSms" data-method="sms">
+            <div class="option-radio">
+              <input type="radio" name="recoveryMethod" id="radioSms" value="sms">
+            </div>
+            <div class="option-content">
+              <h3><i class="fas fa-phone-alt"></i> Par SMS</h3>
+              <p>Recevez un code de vérification sur votre téléphone</p>
+              <div class="option-detail hidden" id="smsDetail">
+                <div class="input-group" style="margin-bottom: 0;">
+                  <label><i class="fas fa-phone-alt"></i> Numéro de téléphone</label>
+                  <input type="tel" class="input-field" id="phoneInput" placeholder="06 12 34 56 78">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="continueBtn"><i class="fas fa-arrow-right"></i> Continuer</button>
+        
+        <div class="back-to-login">
+          <button id="backToLoginBtn" onclick="window.location.href='test1.html'"><i class="fas fa-arrow-left"></i> Retour à la connexion</button>
+        </div>
+
+        <div class="info-message" id="choiceMessage" style="display: none;"></div>
+      </div>
+
+      <!-- Écran de confirmation (après envoi) -->
+      <div id="confirmationScreen" class="hidden">
+        <div class="confirmation-screen">
+          <i class="fas fa-paper-plane" id="confirmationIcon"></i>
+          <h3 id="confirmationTitle">Vérifiez votre email</h3>
+          <p id="confirmationText">Un lien de réinitialisation a été envoyé à <strong></strong></p>
+          <button class="btn-primary" id="resendBtn"><i class="fas fa-redo"></i> Renvoyer</button>
+          <div class="back-to-login" style="margin-top: 1rem;">
+            <button id="backToChoiceBtn"><i class="fas fa-arrow-left"></i> Choisir une autre méthode</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Éléments DOM
+      const choiceScreen = document.getElementById('choiceScreen');
+      const confirmationScreen = document.getElementById('confirmationScreen');
+      
+      const optionEmail = document.getElementById('optionEmail');
+      const optionSms = document.getElementById('optionSms');
+      const radioEmail = document.getElementById('radioEmail');
+      const radioSms = document.getElementById('radioSms');
+      const emailDetail = document.getElementById('emailDetail');
+      const smsDetail = document.getElementById('smsDetail');
+      
+      const emailInput = document.getElementById('emailInput');
+      const phoneInput = document.getElementById('phoneInput');
+      
+      const continueBtn = document.getElementById('continueBtn');
+      const backToChoiceBtn = document.getElementById('backToChoiceBtn');
+      const resendBtn = document.getElementById('resendBtn');
+      
+      const choiceMessage = document.getElementById('choiceMessage');
+      const confirmationIcon = document.getElementById('confirmationIcon');
+      const confirmationTitle = document.getElementById('confirmationTitle');
+      const confirmationText = document.getElementById('confirmationText');
+
+      // État actuel
+      let selectedMethod = 'email';
+      let lastContact = '';
+
+      // Fonctions d'affichage
+      function showChoiceScreen() {
+        choiceScreen.classList.remove('hidden');
+        confirmationScreen.classList.add('hidden');
+        choiceMessage.style.display = 'none';
+      }
+
+      function showConfirmationScreen(method, contact) {
+        choiceScreen.classList.add('hidden');
+        confirmationScreen.classList.remove('hidden');
+        lastContact = contact;
+        
+        if (method === 'email') {
+          confirmationIcon.className = 'fas fa-envelope-open-text';
+          confirmationTitle.textContent = 'Vérifiez votre email';
+          confirmationText.innerHTML = `Un lien de réinitialisation a été envoyé à <strong>${contact}</strong>`;
+        } else {
+          confirmationIcon.className = 'fas fa-sms';
+          confirmationTitle.textContent = 'Code envoyé par SMS';
+          confirmationText.innerHTML = `Un code de vérification a été envoyé au <strong>${contact}</strong>`;
+        }
+      }
+
+      // Gestion de la sélection des options
+      function selectOption(method) {
+        selectedMethod = method;
+        
+        // Mise à jour des radios
+        radioEmail.checked = (method === 'email');
+        radioSms.checked = (method === 'sms');
+        
+        // Mise à jour des classes selected
+        if (method === 'email') {
+          optionEmail.classList.add('selected');
+          optionSms.classList.remove('selected');
+          emailDetail.classList.remove('hidden');
+          smsDetail
