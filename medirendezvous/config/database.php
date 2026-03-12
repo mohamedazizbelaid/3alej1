@@ -2,7 +2,7 @@
 // config/database.php
 class Database {
     private $host = "localhost";
-    private $db_name = "medirendezvous";
+    private $db_name = "database";
     private $username = "root";
     private $password = "";
     public $conn;
